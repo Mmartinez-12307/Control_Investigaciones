@@ -17,7 +17,7 @@ class Documento extends Model
         'Nombre',
         'Fecha',
         'IdInvestigacion',
-        'TipoDocumento'
+        'tipo_entrega'
     ];
 
     protected $casts = [
@@ -26,10 +26,16 @@ class Documento extends Model
 
     public function investigacion()
     {
-        return $this->belongsTo(Investigacion::class, 'IdInvestigacion');
+        return $this->belongsTo(Investigacion::class, 'IdInvestigacion', 'IdInvestigacion');
     }
+
+    public function versions()
+    {
+        return $this->hasMany(DocumentoVersion::class, 'IdDocumento', 'IdDocumento');
+    }
+
     public function versiones()
-{
-    return $this->hasMany(DocumentoVersion::class, 'IdDocumento');
-}
+    {
+        return $this->hasMany(DocumentoVersion::class, 'IdDocumento');
+    }
 }

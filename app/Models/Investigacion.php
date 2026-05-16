@@ -44,9 +44,10 @@ class Investigacion extends Model
     {
         return $this->hasMany(Documento::class, 'IdInvestigacion');
     }
+    
     public function docente()
-{
-    return $this->belongsTo(Usuario::class, 'Carnet', 'Carnet');
-}
+    {
+        return $this->belongsTo(Usuario::class, 'Carnet', 'Carnet');
+    }
 }
 

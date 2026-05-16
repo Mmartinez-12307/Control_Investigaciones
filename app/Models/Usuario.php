@@ -22,6 +22,7 @@ class Usuario extends Authenticable
         'Clave',
         'IdRol',
         'IdEscuela',
+        'Correo',
     ];
 
     protected $hidden = [

@@ -17,6 +17,11 @@ class Escuela extends Model
     protected $fillable = [
         'Nombre'
     ];
+
+    public function investigaciones()
+    {
+        return $this->hasMany(Investigacion::class, 'IdEscuela', 'IdEscuela');
+    }
 }
 
 
