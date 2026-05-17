@@ -29,7 +29,7 @@ class CoordinadorController extends Controller
             $investigacion = Investigacion::findOrFail($documento->IdInvestigacion);
 
             $usuario = DB::table('Usuario')
-                ->where('Carnet', $investigacion->carnet)
+                ->where('Carnet', $investigacion->Carnet)
                 ->first();
 
             /* if ($usuario && $usuario->Correo) {

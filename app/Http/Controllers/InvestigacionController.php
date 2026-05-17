@@ -54,7 +54,6 @@ class InvestigacionController extends Controller
 
         $ultimas = $query->orderBy('FechaCreacion', 'desc')->take(5)->get();
 
-        // 🔥 ESTO TE FALTABA
         $docentes = \App\Models\Usuario::where('IdRol', 3)->get();
 
         $porMateria = Investigacion::select('Materia', DB::raw('count(*) as total'))

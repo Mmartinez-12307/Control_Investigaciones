@@ -22,13 +22,13 @@ class Usuario extends Authenticable
         'Clave',
         'IdRol',
         'IdEscuela',
-        'Correo',
+        'correo',
     ];
 
     protected $hidden = [
         'Clave',
     ];
-    
+
     public function getAuthPassword()
     {
         return $this->Clave;

@@ -29,12 +29,12 @@
                 <label class="text-muted">Estado</label>
 
                 @php
-                    $color = match($investigacion->Estado) {
-                        'Pendiente' => 'bg-warning text-dark',
-                        'En revisión' => 'bg-info text-dark',
-                        'Completado' => 'bg-success',
-                        default => 'bg-secondary'
-                    };
+                $color = match($investigacion->Estado) {
+                'Pendiente' => 'bg-warning text-dark',
+                'En revisión' => 'bg-info text-dark',
+                'Completado' => 'bg-success',
+                default => 'bg-secondary'
+                };
                 @endphp
 
                 <span class="badge rounded-pill {{ $color }} px-3 py-2">
@@ -92,7 +92,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-2">
 
                     <span class="badge bg-dark px-3 py-2 rounded-pill">
-                        {{ $doc->TipoDocumento }}
+                        {{ $doc->tipo_entrega }}
                     </span>
 
                     <small class="text-muted">
@@ -108,7 +108,7 @@
                     {{ \Carbon\Carbon::parse($doc->Fecha)->diffForHumans() }}
                 </p>
                 <a href="/documento/{{ $doc->IdDocumento }}"
-                   class="btn btn-primary w-100 rounded-3">
+                    class="btn btn-primary w-100 rounded-3">
 
                     📂 Ver versiones
 
