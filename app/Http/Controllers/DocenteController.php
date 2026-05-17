@@ -48,7 +48,7 @@ class DocenteController extends Controller
 
         // Historial reciente (últimos 10)
         $historial = DocumentoVersion::whereHas('documento.investigacion', function ($q) use ($carnetDocente) {
-            $q->where('carnet', $carnetDocente);
+            $q->where('Carnet', $carnetDocente);
         })
             ->with('documento')
             ->orderBy('Fecha', 'desc')
@@ -424,7 +424,7 @@ class DocenteController extends Controller
         $filtro = $request->tipo_entrega;
 
         $query = Documento::whereHas('investigacion', function ($q) use ($carnetDocente) {
-            $q->where('carnet', $carnetDocente);
+            $q->where('Carnet', $carnetDocente);
         })->with(['versions' => function ($q) {
             $q->orderBy('Fecha', 'desc');
         }]);
