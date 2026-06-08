@@ -48,4 +48,9 @@ class Usuario extends Authenticable
     {
         return $this->belongsTo(Escuela::class, 'IdEscuela');
     }
+
+    public function investigacionesAsignadas()
+    {
+        return $this->hasMany(Investigacion::class, 'Carnet', 'Carnet');
+    }
 }
