@@ -93,6 +93,32 @@
             Filtrar 
         </button>
 
+        @if (session('error'))
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    Swal.fire({
+                    icon: 'error',
+                    title: '⚠️ Fechas inválidas',
+                    text: "{{ session('error') }}",
+                    showConfirmButton: true,
+                    });
+                });
+            </script>
+        @endif
+
+        @if (request('fecha_inicio') && $total == 0)
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Sin resultados',
+                        text: 'No se encontraron investigaciones en el rango de fechas seleccionado.',
+                        showConfirmButton: true,
+                    });
+                });
+            </script>
+        @endif
+
         <a href="{{ route('decano.index') }}" class="btn btn-secondary">
             Limpiar
         </a>

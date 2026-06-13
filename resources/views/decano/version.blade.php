@@ -89,15 +89,51 @@
 
     </div>
 </div>
+
 <div class="card shadow border-0 rounded-4 mb-4">
     <div class="card-body p-2">
 
-        <iframe
-            src="{{ asset($version->RutaArchivo) }}"
-            width="100%"
-            height="760px"
-            style="border: none; border-radius: 12px;">
-        </iframe>
+        @php
+            $extension = strtolower(pathinfo($version->RutaArchivo, PATHINFO_EXTENSION));
+            $esBanner = strtolower($version->documento->tipo_entrega ?? '') === 'banner';
+            $esImagen = in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+            $esPdf = $extension === 'pdf';
+        @endphp
+
+        @if ($esBanner && $esImagen)
+            {{-- Banner: imagen centrada + botón de descarga --}}
+            <div class="d-flex flex-column align-items-center justify-content-center p-4">
+                <img src="{{ asset($version->RutaArchivo) }}"
+                    class="img-fluid rounded-4 shadow mb-4"
+                    style="max-height: 600px; object-fit: contain;"
+                    alt="Banner del documento">
+
+                <a href="{{ asset($version->RutaArchivo) }}"
+                    class="btn btn-primary"
+                    download>
+                    ⬇️ Descargar banner
+                </a>
+            </div>
+
+        @elseif ($esPdf)
+            {{-- PDF: vista previa normal --}}
+            <iframe
+                src="{{ asset($version->RutaArchivo) }}"
+                width="100%"
+                height="760px"
+                style="border: none; border-radius: 12px;">
+            </iframe>
+
+        @else
+            {{-- Otros archivos (Word, etc): sin vista previa --}}
+            <div style="height: 300px;" class="d-flex flex-column align-items-center justify-content-center text-center p-4 bg-light rounded-4">
+                <span style="font-size: 64px;">📄</span>
+                <h5 class="mt-3 text-muted">Vista previa no disponible</h5>
+                <a href="{{ asset($version->RutaArchivo) }}" class="btn btn-primary mt-2" download>
+                    ⬇️ Descargar archivo
+                </a>
+            </div>
+        @endif
 
     </div>
 </div>

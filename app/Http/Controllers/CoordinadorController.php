@@ -16,72 +16,53 @@ class CoordinadorController extends Controller
 {
     public function actualizarEstado(Request $request, $versionId)
     {
-        try {
-            $version = DocumentoVersion::findOrFail($versionId);
+        $version = DocumentoVersion::findOrFail($versionId);
+        $version->Estado = $request->Estado;
+        $version->save();
 
-            $nuevoEstado = $request->Estado;
+        $documento = Documento::findOrFail($version->IdDocumento);
+        $investigacion = Investigacion::findOrFail($documento->IdInvestigacion);
 
-            $version->Estado = $nuevoEstado;
-            $version->save();
+        $usuario = DB::table('Usuario')
+            ->where('Carnet', $investigacion->Carnet)
+            ->first();
 
-            $documento = Documento::findOrFail($version->IdDocumento);
-
-            $investigacion = Investigacion::findOrFail($documento->IdInvestigacion);
-
-            $usuario = DB::table('Usuario')
-                ->where('Carnet', $investigacion->Carnet)
-                ->first();
-
-            /* if ($usuario && $usuario->Correo) {
-
-                if ($nuevoEstado === 'Completado') {
+        if ($usuario && $usuario->correo) {
+            try {
+                if ($request->Estado === 'Completado') {
                     $asunto = 'Documento aprobado';
                     $mensaje = 'Tu documento "' . $documento->Nombre . '" ha sido aprobado correctamente.';
-                } elseif ($nuevoEstado === 'Pendiente_Nueva_Version') {
+                } elseif ($request->Estado === 'Pendiente_Nueva_Version') {
                     $asunto = 'Documento requiere correcciones';
                     $mensaje = 'Tu documento "' . $documento->Nombre . '" necesita correcciones. Revisa los comentarios del coordinador.';
                 } else {
                     $asunto = 'Actualización de documento';
                     $mensaje = 'El estado de tu documento fue actualizado.';
                 }
-
-                Mail::to($usuario->Correo)->send(
-                    new ObservacionesMail($asunto, $mensaje, $documento->Nombre)
-                );
-            }
-                */
-
-            if ($usuario && $usuario->correo) {
-
-                Log::info('Usuario encontrado: ' . $usuario->correo);
-
-                if ($nuevoEstado === 'Completado') {
-                    $asunto = 'Documento aprobado';
-                    $mensaje = 'Tu documento "' . $documento->Nombre . '" ha sido aprobado correctamente.';
-                } elseif ($nuevoEstado === 'Pendiente_Nueva_Version') {
-                    $asunto = 'Documento requiere correcciones';
-                    $mensaje = 'Tu documento "' . $documento->Nombre . '" necesita correcciones. Revisa los comentarios del coordinador.';
-                } else {
-                    $asunto = 'Actualización de documento';
-                    $mensaje = 'El estado de tu documento fue actualizado.';
-                }
-
-                Log::info('Intentando enviar correo a: ' . $usuario->correo);
 
                 Mail::to($usuario->correo)->send(
                     new ObservacionesMail($asunto, $mensaje, $documento->Nombre)
                 );
 
-                Log::info('Correo enviado correctamente');
-            } else {
-                Log::error('No se encontró correo del usuario');
+                return redirect()->back()->with([
+                    'success' => 'Estado actualizado correctamente.',
+                    'correo_ok' => 'Correo enviado a ' . $usuario->correo,
+                ]);
+            } catch (\Exception $e) {
+                Log::error($e->getMessage());
+
+                return redirect()->back()->with([
+                    'success' => 'Estado actualizado correctamente.',
+                    'correo_error' => 'El correo no se pudo enviar.',
+                ]);
             }
+        } else {
+            Log::error('No se encontró correo del usuario');
 
-            return redirect()->back()->with('success', 'Estado actualizado y correo enviado correctamente.');
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
-
-            return redirect()->back()->with('error', 'Ocurrió un error al actualizar el estado.');
+            return redirect()->back()->with([
+                'success' => 'Estado actualizado correctamente.',
+                'correo_error' => 'No se encontró correo del usuario.',
+            ]);
         }
     }
 }

@@ -19,6 +19,12 @@ class DecanoController extends Controller
     {
         $baseQuery = Investigacion::query();
 
+        if ($request->filled('fecha_inicio') && $request->filled('fecha_fin')) {
+        if ($request->fecha_inicio > $request->fecha_fin) {
+            return redirect()->back()->with('error', 'La fecha inicial no puede ser mayor que la fecha final.');
+            }
+        }
+
         if ($request->filled('fecha_inicio')) {
             $baseQuery->whereDate('FechaCreacion', '>=', $request->fecha_inicio);
         }

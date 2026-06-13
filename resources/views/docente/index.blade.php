@@ -114,8 +114,8 @@
                                         <span
                                             class="badge bg-{{ $item['Estado'] === 'Pendiente'
                                                 ? 'warning'
-                                                : ($item['Estado'] === 'Revisado'
-                                                    ? 'danger'
+                                                : ($item['Estado'] === 'Corregido'
+                                                    ? 'secondary'
                                                     : ($item['Estado'] === 'Pendiente_Nueva_Version'
                                                         ? 'info'
                                                         : 'success')) }}">

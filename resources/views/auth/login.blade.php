@@ -96,15 +96,6 @@
                            required>
                 </div>
 
-                <div class="d-flex justify-content-between align-items-center mb-3">
-
-                    <div>
-                        <input type="checkbox" name="remember">
-                        <small>Recordarme</small>
-                    </div>
-
-                </div>
-
                 <button class="btn btn-custom w-100">
                     Entrar
                 </button>

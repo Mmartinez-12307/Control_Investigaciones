@@ -14,8 +14,24 @@
 
         <div class="col-md-8">
             <div class="card shadow p-2">
-                <iframe src="{{ asset($version->RutaArchivo) }}" width="100%" height="600px" style="border: none;">
-                </iframe>
+                @php
+                    $extension = pathinfo($version->RutaArchivo, PATHINFO_EXTENSION);
+                    $esVisualizableEnIframe = in_array(strtolower($extension), ['pdf', 'jpg', 'jpeg', 'png', 'gif']);
+                @endphp
+
+                @if ($esVisualizableEnIframe)
+                    <iframe src="{{ asset($version->RutaArchivo) }}" width="100%" height="600px"
+                        style="border: none;"></iframe>
+                @else
+                    <div style="height: 600px;"
+                        class="d-flex flex-column align-items-center justify-content-center text-center p-4 bg-light rounded">
+                        <span style="font-size: 64px;">📄</span>
+                        <h5 class="mt-3 text-muted">Vista previa no disponible</h5>
+                        <a href="{{ asset($version->RutaArchivo) }}" class="btn btn-primary mt-2" download>
+                            ⬇️ Descargar archivo
+                        </a>
+                    </div>
+                @endif
             </div>
         </div>
 
@@ -108,12 +124,31 @@
         @if (session('success'))
             <script>
                 document.addEventListener("DOMContentLoaded", function() {
+
                     Swal.fire({
                         icon: 'success',
                         title: '¡Éxito!',
                         text: "{{ session('success') }}",
                         showConfirmButton: false,
                         timer: 2000
+                    }).then(() => {
+
+                        @if (session('correo_ok'))
+                            Swal.fire({
+                                icon: 'success',
+                                title: '📧 Correo enviado',
+                                text: "{{ session('correo_ok') }}",
+                                showConfirmButton: true,
+                            });
+                        @elseif (session('correo_error'))
+                            Swal.fire({
+                                icon: 'warning',
+                                title: '⚠️ Aviso de correo',
+                                text: "{{ session('correo_error') }}",
+                                showConfirmButton: true,
+                            });
+                        @endif
+
                     });
                 });
             </script>
