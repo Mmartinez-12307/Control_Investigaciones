@@ -26,6 +26,7 @@ class ObservacionesMail extends Mailable
         return $this->subject($this->asunto)
                     ->view('emails.observaciones')
                     ->with([
+                        'asunto' => $this->asunto,
                         'mensaje' => $this->mensaje,
                         'nombreDocumento' => $this->nombreDocumento,
                     ]);
